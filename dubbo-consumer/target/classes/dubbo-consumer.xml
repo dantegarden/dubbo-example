@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--spring包扫描-->
+    <context:component-scan base-package="service"></context:component-scan>
+    <!--指定当前应用名，dubbo通过应用名来区分服务-->
+    <dubbo:application name="dubbo-consumer"></dubbo:application>
+    <!--指定zookeeper-->
+    <dubbo:registry protocol="zookeeper" address="localhost:2181"></dubbo:registry>
+    <!--声明需要调用的远程服务的接口,生成远程服务代理-->
+    <dubbo:reference id="userService" interface="service.UserService" stub="service.impl.UserServiceStub"></dubbo:reference>
+
+    <!--配置当前消费者的统一规则-->
+    <dubbo:consumer timeout="3000"></dubbo:consumer>
+
+    <!--通过zk注册中心来发现监控中心-->
+    <dubbo:monitor protocol="registry"></dubbo:monitor>
+</beans>
